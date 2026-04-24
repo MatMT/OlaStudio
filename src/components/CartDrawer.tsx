@@ -43,7 +43,7 @@ export function CartDrawer() {
   const handleCheckout = () => {
     if (!selectedDelivery || (requiresPayment && !selectedPayment)) return;
 
-    let message = "¡Hola OlaStudio! 👋 Me gustaría realizar el siguiente pedido:\n\n";
+    let message = "¡Hola OlaStudio! Me gustaría realizar el siguiente pedido:\n\n";
 
     items.forEach((item) => {
       const variantStr = (item.variantModel && item.variantColor)
@@ -245,8 +245,8 @@ export function CartDrawer() {
               onClick={handleCheckout}
               disabled={!selectedDelivery || (requiresPayment && !selectedPayment)}
               className={`w-full hover:cursor-pointer py-5 text-lg text-white rounded-full font-bold transition-all shadow-lg ${selectedDelivery && (!requiresPayment || selectedPayment)
-                  ? 'bg-ola-blue hover:bg-ola-blue-hover shadow-ola-blue/20'
-                  : 'bg-muted cursor-not-allowed opacity-70 shadow-none'
+                ? 'bg-ola-blue hover:bg-ola-blue-hover shadow-ola-blue/20'
+                : 'bg-muted cursor-not-allowed opacity-70 shadow-none'
                 }`}
             >
               {!selectedDelivery
