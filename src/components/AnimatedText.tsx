@@ -20,7 +20,7 @@ export function AnimatedText() {
   }, []);
 
   return (
-    <div className="inline-flex overflow-hidden relative w-[250px] md:w-[350px] justify-center items-center h-[40px] md:h-[60px] align-bottom text-ola-blue">
+    <div className="relative inline-block overflow-hidden h-[1.2em] w-[7em] align-bottom">
       <AnimatePresence mode="popLayout">
         <motion.span
           key={index}

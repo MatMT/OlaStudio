@@ -37,7 +37,7 @@ export function CartDrawer() {
       const variantStr = (item.variantModel && item.variantColor) 
         ? ` (Para: ${item.variantModel} | Color: ${item.variantColor})` 
         : "";
-      message += `- ${item.quantity}x ${item.name}${variantStr} (SKU: ${item.sku}) - $${(item.price * item.quantity).toFixed(2)}\n`;
+      message += `- ${item.quantity}x ${item.name}${variantStr} - $${(item.price * item.quantity).toFixed(2)}\n`;
     });
 
     message += `\nSubtotal: $${totalPrice.toFixed(2)}\n`;

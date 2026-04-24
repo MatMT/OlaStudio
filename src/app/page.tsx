@@ -17,7 +17,12 @@ export default function Home() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-background pt-24 pb-32">
-          <div className="absolute inset-0 bg-gradient-to-b from-ola-blue/5 to-transparent pointer-events-none" />
+          {/* Animated Glow Background */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] pointer-events-none -z-10 opacity-40 dark:opacity-20 flex justify-center">
+            <div className="w-[60%] h-full bg-ola-blue blur-[100px] rounded-full mix-blend-multiply dark:mix-blend-screen animate-[pulse_6s_ease-in-out_infinite]" />
+            <div className="absolute w-[50%] h-full bg-cyan-400 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen animate-[pulse_8s_ease-in-out_infinite_alternate]" />
+          </div>
+
           <div className="max-w-6xl mx-auto px-4 relative z-10 flex flex-col items-center text-center animate-slide-up">
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-foreground mb-6 leading-tight">
               Eleva tu ecosistema Apple. <br />
