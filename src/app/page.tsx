@@ -18,9 +18,9 @@ export default function Home() {
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-background pt-24 pb-32">
           {/* Animated Glow Background */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] pointer-events-none -z-10 opacity-40 dark:opacity-20 flex justify-center">
-            <div className="w-[60%] h-full bg-ola-blue blur-[100px] rounded-full mix-blend-multiply dark:mix-blend-screen animate-[pulse_6s_ease-in-out_infinite]" />
-            <div className="absolute w-[50%] h-full bg-cyan-400 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen animate-[pulse_8s_ease-in-out_infinite_alternate]" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] md:w-full max-w-4xl h-[400px] pointer-events-none z-0 opacity-60 dark:opacity-30 flex justify-center">
+            <div className="absolute left-[10%] md:left-[20%] w-[50%] h-[80%] bg-ola-blue blur-[100px] rounded-full animate-[pulse_6s_ease-in-out_infinite]" />
+            <div className="absolute right-[10%] md:right-[20%] w-[50%] h-[80%] bg-cyan-400 blur-[120px] rounded-full animate-[pulse_8s_ease-in-out_infinite_alternate]" />
           </div>
 
           <div className="max-w-6xl mx-auto px-4 relative z-10 flex flex-col items-center text-center animate-slide-up">
