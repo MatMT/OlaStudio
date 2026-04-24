@@ -7,6 +7,7 @@ export const AVAILABLE_PRODUCTS: Product[] = [
     description: "El repuesto esencial. Incluye 2 puntas premium blancas y 2 protectores de silicona silenciosos. Ideal para reemplazos rápidos y protección de pantalla.",
     price: 8.00,
     sku: "OLA-AP-BAS",
+    image: "/products/kit-basico.jpeg",
     available: true,
   },
   {
@@ -15,6 +16,7 @@ export const AVAILABLE_PRODUCTS: Product[] = [
     description: "Balance perfecto para creadores. Incluye 1 grip de silicona para evitar fatiga, 2 puntas premium y 2 protectores de silicona.",
     price: 12.00,
     sku: "OLA-AP-ERG",
+    image: "/products/kit-ergonomico.jpeg",
     available: true,
   },
   {
@@ -23,6 +25,7 @@ export const AVAILABLE_PRODUCTS: Product[] = [
     description: "Blindaje y protección total. Incluye 1 funda completa de silicona (compatible con carga magnética), 4 puntas premium y 4 protectores de silicona.",
     price: 18.00,
     sku: "OLA-AP-PRO",
+    image: "/products/kit-pro.jpeg",
     available: true,
   },
   {
@@ -31,6 +34,7 @@ export const AVAILABLE_PRODUCTS: Product[] = [
     description: "Puntas especiales de repuesto con diseño de ancla para un agarre superior y trazos de precisión inigualable.",
     price: 5.00,
     sku: "OLA-AP-ANC",
+    image: "/products/puntas.jpeg",
     available: true,
   }
 ];

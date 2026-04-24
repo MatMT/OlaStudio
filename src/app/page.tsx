@@ -18,16 +18,16 @@ export default function Home() {
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-background pt-24 pb-32">
           {/* Animated Glow Background */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] md:w-full max-w-4xl h-[400px] pointer-events-none z-0 opacity-60 dark:opacity-30 flex justify-center">
-            <div className="absolute left-[10%] md:left-[20%] w-[50%] h-[80%] bg-ola-blue blur-[100px] rounded-full animate-[pulse_6s_ease-in-out_infinite]" />
-            <div className="absolute right-[10%] md:right-[20%] w-[50%] h-[80%] bg-cyan-400 blur-[120px] rounded-full animate-[pulse_8s_ease-in-out_infinite_alternate]" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] md:w-full max-w-4xl h-[400px] pointer-events-none z-0 opacity-80 dark:opacity-40 flex justify-center">
+            <div className="absolute left-[10%] md:left-[20%] w-[50%] h-[80%] bg-ola-blue/30 dark:bg-ola-blue blur-[100px] rounded-full animate-[pulse_6s_ease-in-out_infinite]" />
+            <div className="absolute right-[10%] md:right-[20%] w-[50%] h-[80%] bg-cyan-400/30 dark:bg-cyan-400 blur-[120px] rounded-full animate-[pulse_8s_ease-in-out_infinite_alternate]" />
           </div>
 
           <div className="max-w-6xl mx-auto px-4 relative z-10 flex flex-col items-center text-center animate-slide-up">
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-foreground mb-6 leading-tight">
               Eleva tu ecosistema Apple. <br />
-              <span className="inline-block mt-4 text-4xl md:text-6xl font-semibold text-muted">
-                Hecho para <AnimatedText />
+              <span className="inline-flex flex-wrap justify-center mt-4 text-4xl md:text-6xl font-semibold text-foreground/70 gap-x-3">
+                <span>Hecho para</span> <AnimatedText />
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-muted max-w-2xl mb-10 mt-4">

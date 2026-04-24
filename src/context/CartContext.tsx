@@ -8,6 +8,7 @@ export type Product = {
   description: string;
   price: number;
   sku: string;
+  image?: string;
   available: boolean;
 };
 

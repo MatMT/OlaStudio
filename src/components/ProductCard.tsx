@@ -2,6 +2,7 @@
 
 import { useCart, Product } from "@/context/CartContext";
 import Link from "next/link";
+import Image from "next/image";
 import { productVariants } from "@/data/variants";
 
 type ProductCardProps = {
@@ -15,9 +16,18 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="group flex flex-col bg-card-bg rounded-2xl p-6 border border-border/50 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
       <Link href={`/producto/${product.id}`} className="block">
-        <div className="aspect-square bg-muted/10 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden">
-          {/* Placeholder for actual image. You can replace this with next/image later */}
-          <div className="w-24 h-24 bg-gradient-to-tr from-muted/20 to-muted/40 rounded-full group-hover:scale-110 transition-transform duration-500" />
+        <div className="aspect-square bg-muted/10 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden group">
+          {product.image ? (
+            <Image 
+              src={product.image} 
+              alt={product.name} 
+              fill
+              className="object-cover group-hover:scale-110 transition-transform duration-500"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          ) : (
+            <div className="w-24 h-24 bg-gradient-to-tr from-muted/20 to-muted/40 rounded-full group-hover:scale-110 transition-transform duration-500" />
+          )}
           {/* If unavailable, show badge */}
           {!product.available && (
             <span className="absolute top-3 right-3 bg-black/80 text-white text-xs font-semibold px-2 py-1 rounded-full backdrop-blur-md">

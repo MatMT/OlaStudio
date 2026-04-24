@@ -20,19 +20,20 @@ export function AnimatedText() {
   }, []);
 
   return (
-    <div className="inline-flex overflow-hidden relative w-[280px] md:w-[450px] justify-start sm:justify-center items-center h-[1.2em] align-bottom text-ola-blue">
+    <motion.span layout className="inline-flex relative align-bottom text-ola-blue items-center overflow-visible">
       <AnimatePresence mode="popLayout">
         <motion.span
+          layout
           key={index}
-          initial={{ y: 50, opacity: 0 }}
+          initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -50, opacity: 0 }}
-          transition={{ duration: 0.5, ease: "anticipate" }}
-          className="absolute font-bold"
+          exit={{ y: -30, opacity: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="whitespace-nowrap font-bold"
         >
           {words[index]}
         </motion.span>
       </AnimatePresence>
-    </div>
+    </motion.span>
   );
 }

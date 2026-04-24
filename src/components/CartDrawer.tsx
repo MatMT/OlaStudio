@@ -1,8 +1,8 @@
 "use client";
 
-import { X, Minus, Plus, ShoppingBag, Truck } from "lucide-react";
+import { X, Minus, Plus, ShoppingBag, Truck, Wallet, Info } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const WHATSAPP_NUMBER = "50360505363";
 
@@ -22,20 +22,32 @@ const DELIVERY_OPTIONS: DeliveryOption[] = [
 export function CartDrawer() {
   const { isCartOpen, setIsCartOpen, items, updateQuantity, removeFromCart, totalPrice } = useCart();
   const [selectedDelivery, setSelectedDelivery] = useState<DeliveryOption | null>(null);
+  const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
+  const paymentRef = useRef<HTMLDivElement>(null);
+
+  const isPendingShipping = selectedDelivery?.id === 'dep';
+  const requiresPayment = selectedDelivery?.id === 'ss' || selectedDelivery?.id === 'dep';
+  const finalTotal = totalPrice + (isPendingShipping ? 0 : (selectedDelivery?.price || 0));
+
+  // Auto-scroll to payment selection when it appears
+  useEffect(() => {
+    if (requiresPayment && paymentRef.current) {
+      setTimeout(() => {
+        paymentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 150);
+    }
+  }, [requiresPayment, selectedDelivery]);
 
   if (!isCartOpen) return null;
 
-  const isPendingShipping = selectedDelivery?.id === 'dep';
-  const finalTotal = totalPrice + (isPendingShipping ? 0 : (selectedDelivery?.price || 0));
-
   const handleCheckout = () => {
-    if (!selectedDelivery) return;
+    if (!selectedDelivery || (requiresPayment && !selectedPayment)) return;
 
     let message = "¡Hola OlaStudio! 👋 Me gustaría realizar el siguiente pedido:\n\n";
 
     items.forEach((item) => {
-      const variantStr = (item.variantModel && item.variantColor) 
-        ? ` (Para: ${item.variantModel} | Color: ${item.variantColor})` 
+      const variantStr = (item.variantModel && item.variantColor)
+        ? ` (Para: ${item.variantModel} | Color: ${item.variantColor})`
         : "";
       message += `- ${item.quantity}x ${item.name}${variantStr} - $${(item.price * item.quantity).toFixed(2)}\n`;
     });
@@ -44,9 +56,11 @@ export function CartDrawer() {
 
     if (isPendingShipping) {
       message += `Método de Entrega: ${selectedDelivery.name} (Cotización Pendiente)\n`;
+      if (requiresPayment) message += `Método de Pago: ${selectedPayment}\n`;
       message += `Total a pagar: $${totalPrice.toFixed(2)} + Envío cotizado\n\n`;
     } else {
       message += `Método de Entrega: ${selectedDelivery.name} ($${selectedDelivery.price.toFixed(2)})\n`;
+      if (requiresPayment) message += `Método de Pago: ${selectedPayment}\n`;
       message += `Total a pagar: $${finalTotal.toFixed(2)}\n\n`;
     }
 
@@ -142,8 +156,8 @@ export function CartDrawer() {
                     <label
                       key={option.id}
                       className={`flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl border cursor-pointer transition-all gap-2 sm:gap-4 ${selectedDelivery?.id === option.id
-                          ? 'border-ola-blue bg-ola-blue/5'
-                          : 'border-border/60 hover:border-border'
+                        ? 'border-ola-blue bg-ola-blue/5'
+                        : 'border-border/60 hover:border-border'
                         }`}
                     >
                       <div className="flex items-start sm:items-center gap-3">
@@ -162,6 +176,43 @@ export function CartDrawer() {
                   ))}
                 </div>
               </div>
+
+              {/* Payment Selection */}
+              {requiresPayment && (
+                <div ref={paymentRef} className="mt-4 border border-border rounded-2xl p-5 bg-background/50 animate-fade-in scroll-mt-24">
+                  <h3 className="font-semibold text-lg flex items-center gap-2 mb-3">
+                    <Wallet className="w-5 h-5 text-ola-blue" />
+                    Método de Pago
+                  </h3>
+                  <div className="bg-muted/10 border border-border rounded-xl p-3 mb-4 flex items-start gap-3">
+                    <Info className="w-4 h-4 text-ola-blue shrink-0 mt-0.5" />
+                    <p className="text-sm text-muted font-medium leading-tight">
+                      Pago anticipado requerido para asegurar tu producto en ruta.
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    {['Banco Agrícola', 'Banco Cuscatlán', 'Chivo Wallet'].map((payment) => (
+                      <label
+                        key={payment}
+                        className={`flex items-center p-3 rounded-xl border cursor-pointer transition-all gap-3 ${selectedPayment === payment
+                          ? 'border-ola-blue bg-ola-blue/5'
+                          : 'border-border/60 hover:border-border'
+                          }`}
+                      >
+                        <input
+                          type="radio"
+                          name="payment"
+                          value={payment}
+                          checked={selectedPayment === payment}
+                          onChange={() => setSelectedPayment(payment)}
+                          className="w-4 h-4 text-ola-blue accent-ola-blue shrink-0"
+                        />
+                        <span className="font-medium text-sm md:text-base">{payment}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
             </>
           )}
         </div>
@@ -192,13 +243,17 @@ export function CartDrawer() {
             </div>
             <button
               onClick={handleCheckout}
-              disabled={!selectedDelivery}
-              className={`w-full py-5 text-lg text-white rounded-full font-bold transition-all shadow-lg ${selectedDelivery
+              disabled={!selectedDelivery || (requiresPayment && !selectedPayment)}
+              className={`w-full hover:cursor-pointer py-5 text-lg text-white rounded-full font-bold transition-all shadow-lg ${selectedDelivery && (!requiresPayment || selectedPayment)
                   ? 'bg-ola-blue hover:bg-ola-blue-hover shadow-ola-blue/20'
-                  : 'bg-muted cursor-not-allowed opacity-70'
+                  : 'bg-muted cursor-not-allowed opacity-70 shadow-none'
                 }`}
             >
-              {selectedDelivery ? 'Pedir por WhatsApp' : 'Selecciona un método de envío'}
+              {!selectedDelivery
+                ? 'Selecciona un método de envío'
+                : (requiresPayment && !selectedPayment)
+                  ? 'Selecciona método de pago'
+                  : 'Pedir por WhatsApp'}
             </button>
           </div>
         )}
