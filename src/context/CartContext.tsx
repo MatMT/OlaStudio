@@ -11,13 +11,18 @@ export type Product = {
   available: boolean;
 };
 
-export type CartItem = Product & { quantity: number };
+export type CartItem = Product & { 
+  quantity: number;
+  cartItemId: string; // Unique ID for the cart item (composite)
+  variantModel?: string;
+  variantColor?: string;
+};
 
 type CartContextType = {
   items: CartItem[];
-  addToCart: (product: Product) => void;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  addToCart: (product: Product, variantModel?: string, variantColor?: string) => void;
+  removeFromCart: (cartItemId: string) => void;
+  updateQuantity: (cartItemId: string, quantity: number) => void;
   clearCart: () => void;
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
@@ -46,31 +51,41 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("ola-cart", JSON.stringify(items));
   }, [items]);
 
-  const addToCart = (product: Product) => {
+  const addToCart = (product: Product, variantModel?: string, variantColor?: string) => {
     setItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      // Create a composite ID so different variants of the same product are distinct
+      const compositeId = `${product.id}-${variantModel || 'base'}-${variantColor || 'base'}`;
+      
+      const existing = prev.find((item) => item.cartItemId === compositeId);
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.cartItemId === compositeId ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
-      return [...prev, { ...product, quantity: 1 }];
+      
+      return [...prev, { 
+        ...product, 
+        quantity: 1, 
+        cartItemId: compositeId,
+        variantModel,
+        variantColor
+      }];
     });
     setIsCartOpen(true);
   };
 
-  const removeFromCart = (productId: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== productId));
+  const removeFromCart = (cartItemId: string) => {
+    setItems((prev) => prev.filter((item) => item.cartItemId !== cartItemId));
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (cartItemId: string, quantity: number) => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      removeFromCart(cartItemId);
       return;
     }
     setItems((prev) =>
       prev.map((item) =>
-        item.id === productId ? { ...item, quantity } : item
+        item.cartItemId === cartItemId ? { ...item, quantity } : item
       )
     );
   };
