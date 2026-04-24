@@ -6,7 +6,8 @@ export const productVariants: Record<string, ProductVariantMap> = {
   "OLA-AP-PRO": { // SKU del Kit Pro 360
     "Apple Pencil Pro": ["Negro", "Gris"],
     "Apple Pencil 2ª Gen": ["Negro"],
-    "Apple Pencil 1ª Gen": ["Naranja"]
+    "Apple Pencil 1ª Gen": ["Naranja"],
+    "Apple Pencil (USB-C)": ["Negro", "Gris"]
   },
   "OLA-AD-CAS": { // SKU de Estuches AirPods
     "AirPods 4": ["Blanco", "Negro"],
