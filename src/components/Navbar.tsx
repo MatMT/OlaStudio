@@ -16,10 +16,10 @@ export function Navbar() {
           <Image 
             src="/logo.svg" 
             alt="OlaLabs Logo" 
-            width={120} 
-            height={45} 
+            width={160} 
+            height={60} 
             priority
-            className="object-contain"
+            className="object-contain h-10 w-auto dark:invert"
           />
         </Link>
 

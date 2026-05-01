@@ -52,8 +52,10 @@ export default function Home() {
               <p className="text-lg text-muted">Kits de puntas y protección. Diseñados para máxima precisión.</p>
             </div>
 
-            <div className="mb-12">
-              <InfiniteProductCarousel products={AVAILABLE_PRODUCTS} speed={1.5} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
             </div>
 
             <div className="flex justify-center mt-8">
@@ -67,6 +69,14 @@ export default function Home() {
           </div>
         </section>
 
+        {/* All Products Carousel Section */}
+        <section className="py-20 bg-background border-t border-border/50 overflow-hidden">
+          <div className="max-w-6xl mx-auto px-4 mb-8">
+            <h2 className="text-3xl font-bold tracking-tight text-center">Explora el Ecosistema Completo</h2>
+          </div>
+          <InfiniteProductCarousel products={[...AVAILABLE_PRODUCTS, ...UPCOMING_PRODUCTS]} speed={0.8} />
+        </section>
+
         {/* Upcoming Section */}
         <section className="py-24 bg-card-bg/50 border-t border-border/50">
           <div className="max-w-6xl mx-auto px-4">
@@ -78,8 +88,10 @@ export default function Home() {
               <p className="text-lg text-muted">Nuevos productos en camino. Muy pronto en OlaStudio.</p>
             </div>
 
-            <div className="mb-8">
-              <InfiniteProductCarousel products={UPCOMING_PRODUCTS} direction="right" speed={1.2} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {UPCOMING_PRODUCTS.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
             </div>
           </div>
         </section>
