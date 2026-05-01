@@ -3,6 +3,7 @@
 import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import Link from "next/link";
+import Image from "next/image";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function Navbar() {
@@ -11,9 +12,15 @@ export function Navbar() {
   return (
     <nav className="sticky top-0 z-40 w-full backdrop-blur-md bg-background/80 border-b border-border transition-all">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="font-semibold text-xl tracking-tight flex items-center gap-2">
-          <span className="text-ola-blue font-bold text-2xl">~</span>
-          <span>OlaStudio</span>
+        <Link href="/" className="flex items-center">
+          <Image 
+            src="/logo.svg" 
+            alt="OlaLabs Logo" 
+            width={120} 
+            height={45} 
+            priority
+            className="object-contain"
+          />
         </Link>
 
         <div className="flex items-center gap-2">

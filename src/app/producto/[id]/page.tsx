@@ -7,6 +7,7 @@ import Image from "next/image";
 import { ArrowLeft, ShieldCheck, Truck, RotateCcw } from "lucide-react";
 import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/ProductCard";
+import { ProductImageCarousel } from "@/components/ProductImageCarousel";
 
 // Helper component for add to cart since this is a server component
 import { AddToCartButton } from "./AddToCartButton";
@@ -42,7 +43,9 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
             {/* Product Image */}
             <div className="aspect-square bg-muted/10 rounded-3xl flex items-center justify-center p-0 border border-border/50 relative overflow-hidden">
-              {product.image ? (
+              {product.images && product.images.length > 1 ? (
+                <ProductImageCarousel images={product.images} productName={product.name} />
+              ) : product.image ? (
                 <Image 
                   src={product.image} 
                   alt={product.name} 

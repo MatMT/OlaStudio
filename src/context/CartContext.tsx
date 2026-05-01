@@ -9,6 +9,7 @@ export type Product = {
   price: number;
   sku: string;
   image?: string;
+  images?: string[];
   available: boolean;
 };
 

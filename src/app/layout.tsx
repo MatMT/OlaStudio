@@ -9,8 +9,36 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "OlaStudio - Accesorios Premium",
-  description: "Catálogo de accesorios premium por OlaLabs",
+  title: "OlaStudio | Accesorios Premium para tu Ecosistema Apple",
+  description: "Catálogo de accesorios premium por OlaLabs. Eleva tu ecosistema Apple con protección y diseño minimalista.",
+  keywords: ["accesorios apple", "funda ipad", "magsafe wallet", "puntas apple pencil", "airpods case", "tecnología", "OlaLabs", "OlaStudio"],
+  authors: [{ name: "OlaLabs" }],
+  openGraph: {
+    title: "OlaStudio | Accesorios Premium",
+    description: "Catálogo de accesorios premium por OlaLabs.",
+    url: "https://olastudio.com",
+    siteName: "OlaStudio",
+    images: [
+      {
+        url: "/OlaLabs.png",
+        width: 800,
+        height: 600,
+        alt: "OlaStudio Logo",
+      },
+    ],
+    locale: "es_SV",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "OlaStudio | Accesorios Premium",
+    description: "Descubre accesorios premium para tu ecosistema Apple en OlaStudio.",
+    images: ["/OlaLabs.png"],
+  },
+  icons: {
+    icon: "/logo.svg",
+    apple: "/OlaLabs.png",
+  },
 };
 
 export default function RootLayout({

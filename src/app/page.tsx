@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import { CartDrawer } from "@/components/CartDrawer";
 import { AnimatedText } from "@/components/AnimatedText";
+import { InfiniteProductCarousel } from "@/components/InfiniteProductCarousel";
 import { AVAILABLE_PRODUCTS, UPCOMING_PRODUCTS } from "@/data/products";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -51,10 +52,8 @@ export default function Home() {
               <p className="text-lg text-muted">Kits de puntas y protección. Diseñados para máxima precisión.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+            <div className="mb-12">
+              <InfiniteProductCarousel products={AVAILABLE_PRODUCTS} speed={1.5} />
             </div>
 
             <div className="flex justify-center mt-8">
@@ -79,10 +78,8 @@ export default function Home() {
               <p className="text-lg text-muted">Nuevos productos en camino. Muy pronto en OlaStudio.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {UPCOMING_PRODUCTS.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+            <div className="mb-8">
+              <InfiniteProductCarousel products={UPCOMING_PRODUCTS} direction="right" speed={1.2} />
             </div>
           </div>
         </section>

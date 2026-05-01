@@ -7,7 +7,12 @@ export const AVAILABLE_PRODUCTS: Product[] = [
     description: "El repuesto esencial. Incluye 2 puntas premium blancas y 2 protectores de silicona silenciosos. Ideal para reemplazos rápidos y protección de pantalla.",
     price: 8.00,
     sku: "OLA-AP-BAS",
-    image: "/products/kit-basico.jpeg",
+    image: "/products/ap-bas/1.jpeg",
+    images: [
+      "/products/ap-bas/1.jpeg",
+      "/products/ap-bas/2.avif",
+      "/products/ap-bas/3.avif"
+    ],
     available: true,
   },
   {
@@ -16,7 +21,10 @@ export const AVAILABLE_PRODUCTS: Product[] = [
     description: "Balance perfecto para creadores. Incluye 1 grip de silicona para evitar fatiga, 2 puntas premium y 2 protectores de silicona.",
     price: 12.00,
     sku: "OLA-AP-ERG",
-    image: "/products/kit-ergonomico.jpeg",
+    image: "/products/ap-erg/1.jpeg",
+    images: [
+      "/products/ap-erg/1.jpeg"
+    ],
     available: true,
   },
   {
@@ -25,7 +33,13 @@ export const AVAILABLE_PRODUCTS: Product[] = [
     description: "Blindaje y protección total. Incluye 1 funda completa de silicona (compatible con carga magnética), 4 puntas premium y 4 protectores de silicona.",
     price: 18.00,
     sku: "OLA-AP-PRO",
-    image: "/products/kit-pro.jpeg",
+    image: "/products/ap-pro/1.jpeg",
+    images: [
+      "/products/ap-pro/1.jpeg",
+      "/products/ap-pro/2.jpeg",
+      "/products/ap-pro/3.avif",
+      "/products/ap-pro/4.avif"
+    ],
     available: true,
   },
   {
@@ -34,7 +48,10 @@ export const AVAILABLE_PRODUCTS: Product[] = [
     description: "Puntas especiales de repuesto con diseño de ancla para un agarre superior y trazos de precisión inigualable.",
     price: 5.00,
     sku: "OLA-AP-ANC",
-    image: "/products/puntas.jpeg",
+    image: "/products/ap-anc/1.jpeg",
+    images: [
+      "/products/ap-anc/1.jpeg"
+    ],
     available: true,
   }
 ];
@@ -46,6 +63,11 @@ export const UPCOMING_PRODUCTS: Product[] = [
     description: "Tarjetero magnético premium de diseño ultradelgado para iPhone. Excelente fuerza de adherencia, ideal para llevar lo esencial.",
     price: 10.00,
     sku: "OLA-MS-WAL",
+    image: "/products/ms-wal/1.jpeg",
+    images: [
+      "/products/ms-wal/1.jpeg",
+      "/products/ms-wal/2.avif"
+    ],
     available: false,
   },
   {
@@ -54,6 +76,11 @@ export const UPCOMING_PRODUCTS: Product[] = [
     description: "Funda protectora de silicona con cordón creativo para AirPods. Protege contra impactos y rayones. Colores oscuros.",
     price: 10.00,
     sku: "OLA-AD-CAS",
+    image: "/products/ad-cas/1.avif",
+    images: [
+      "/products/ad-cas/1.avif",
+      "/products/ad-cas/2.png"
+    ],
     available: false,
   },
   {
@@ -62,6 +89,12 @@ export const UPCOMING_PRODUCTS: Product[] = [
     description: "Funda protectora inteligente para iPad con tapa plegable y soporte. Protege el equipo al 100% mientras permite diferentes ángulos de visión.",
     price: 18.00,
     sku: "OLA-IP-COV",
+    image: "/products/ip-cov/1.avif",
+    images: [
+      "/products/ip-cov/1.avif",
+      "/products/ip-cov/2.avif",
+      "/products/ip-cov/3.avif"
+    ],
     available: false,
   },
 ];

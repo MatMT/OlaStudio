@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="150" viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style type="text/css">
+      /* Estilos predeterminados (Modo Claro) */
+      .adaptive-logo {
+        fill: #002d5c; /* El color azul marino de OlaLabs */
+      }
+
+      /* Estilos para Modo Oscuro */
+      @media (prefers-color-scheme: dark) {
+        .adaptive-logo {
+          fill: #ffffff; /* Blanco puro para contraste */
+        }
+      }
+    </style>
+  </defs>
+
+  <!-- Grupo que contiene todo el logotipo, con la clase 'adaptive-logo' -->
+  <g class="adaptive-logo">
+    <!-- Texto: OlaLabs -->
+    <text x="50%" y="60" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="bold">OlaLabs</text>
+    
+    <!-- Símbolo: {</>} -->
+    <text x="50%" y="110" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="normal">{&lt;/&gt;}</text>
+  </g>
+</svg>
