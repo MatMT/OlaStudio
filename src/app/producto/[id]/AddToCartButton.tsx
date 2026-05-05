@@ -1,43 +1,21 @@
 "use client";
 
-import { useCart, Product } from "@/context/CartContext";
-import { productVariants } from "@/data/variants";
-import { useState, useEffect } from "react";
+import { Product } from "@/context/CartContext";
+import { useProductForm } from "@/hooks/useProductForm";
 
 export function AddToCartButton({ product }: { product: Product }) {
-  const { addToCart } = useCart();
-  const variants = productVariants[product.sku];
-
-  const [selectedModel, setSelectedModel] = useState<string>("");
-  const [selectedColor, setSelectedColor] = useState<string>("");
-
-  // When model changes, reset color if the new model doesn't have the current color
-  useEffect(() => {
-    if (variants && selectedModel) {
-      const availableColors = variants[selectedModel] || [];
-      if (!availableColors.includes(selectedColor)) {
-        setSelectedColor("");
-      }
-    }
-  }, [selectedModel, variants, selectedColor]);
-
-  const handleAdd = () => {
-    if (variants && (!selectedModel || !selectedColor)) {
-      return;
-    }
-    addToCart(product, selectedModel, selectedColor);
-    
-    // Optional: Reset selections after adding?
-    // setSelectedModel("");
-    // setSelectedColor("");
-  };
-
-  const isReadyToAdd = variants ? (selectedModel && selectedColor) : true;
+  const {
+    variants,
+    selectedModel, setSelectedModel,
+    selectedColor,  setSelectedColor,
+    isReadyToAdd,   handleAdd,
+  } = useProductForm(product);
 
   return (
     <div className="flex flex-col gap-6">
       {variants && (
         <div className="flex flex-col gap-4 bg-muted/5 border border-border p-6 rounded-2xl">
+          {/* Model selector */}
           <div>
             <label className="block text-sm font-semibold mb-2">Selecciona el Modelo</label>
             <select
@@ -52,6 +30,7 @@ export function AddToCartButton({ product }: { product: Product }) {
             </select>
           </div>
 
+          {/* Color selector */}
           <div>
             <label className="block text-sm font-semibold mb-2">Color disponible</label>
             <select

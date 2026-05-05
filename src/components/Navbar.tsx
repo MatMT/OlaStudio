@@ -2,78 +2,58 @@
 
 import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useNavbar } from "@/hooks/useNavbar";
 import Link from "next/link";
-import Image from "next/image";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
   const { totalItems, setIsCartOpen } = useCart();
-  const [logoClicks, setLogoClicks] = useState(0);
-  const [showEasterEgg, setShowEasterEgg] = useState(false);
-
-  const handleLogoClick = (e: React.MouseEvent) => {
-    // Prevent default navigation if we are just clicking for the easter egg
-    if (logoClicks < 5) {
-      setLogoClicks(prev => prev + 1);
-      if (logoClicks === 4) {
-        setShowEasterEgg(true);
-        e.preventDefault();
-      }
-    }
-  };
+  const { showEasterEgg, setShowEasterEgg, handleLogoClick } = useNavbar();
 
   return (
     <>
       <nav className="sticky top-0 z-40 w-full backdrop-blur-md bg-background/80 border-b border-border transition-all">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link 
-          href="/" 
-          className="font-semibold text-xl tracking-tight flex items-center gap-2 select-none cursor-pointer"
-          onClick={handleLogoClick}
-        >
-          <span className="text-ola-blue font-bold text-2xl">~</span>
-          <span>OlaStudio</span>
-        </Link>
-
-        {/* Global Navigation Links */}
-        <div className="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
-          <Link href="/#catalogo" className="text-sm font-medium text-muted hover:text-foreground transition-colors">
-            Kits Apple Pencil
-          </Link>
-          <Link href="/#accesorios" className="text-sm font-medium text-muted hover:text-foreground transition-colors">
-            Sueltos
-          </Link>
-          <Link href="/#ecosistema" className="text-sm font-medium text-muted hover:text-foreground transition-colors">
-            Ecosistema
-          </Link>
-          <Link href="/inventario" className="text-sm font-medium text-muted hover:text-foreground transition-colors">
-            Inventario Completo
-          </Link>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
-          <button
-            onClick={() => setIsCartOpen(true)}
-            className="relative p-2 rounded-full hover:bg-muted/10 transition-colors"
-            aria-label="Abrir carrito"
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+          <Link
+            href="/"
+            className="font-semibold text-xl tracking-tight flex items-center gap-2 select-none cursor-pointer"
+            onClick={handleLogoClick}
           >
-            <ShoppingBag className="w-5 h-5 text-foreground" />
-            {totalItems > 0 && (
-              <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-ola-blue rounded-full">
-                {totalItems}
-              </span>
-            )}
-          </button>
+            <span className="text-ola-blue font-bold text-2xl">~</span>
+            <span>OlaStudio</span>
+          </Link>
+
+          {/* Global Navigation Links */}
+          <div className="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
+            <Link href="/#catalogo"   className="text-sm font-medium text-muted hover:text-foreground transition-colors">Kits Apple Pencil</Link>
+            <Link href="/#accesorios" className="text-sm font-medium text-muted hover:text-foreground transition-colors">Sueltos</Link>
+            <Link href="/#ecosistema" className="text-sm font-medium text-muted hover:text-foreground transition-colors">Ecosistema</Link>
+            <Link href="/inventario"  className="text-sm font-medium text-muted hover:text-foreground transition-colors">Inventario Completo</Link>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2 rounded-full hover:bg-muted/10 transition-colors"
+              aria-label="Abrir carrito"
+            >
+              <ShoppingBag className="w-5 h-5 text-foreground" />
+              {totalItems > 0 && (
+                <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-ola-blue rounded-full">
+                  {totalItems}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
-      </div>
-    </nav>
-      
+      </nav>
+
+      {/* Easter Egg Modal */}
       <AnimatePresence>
         {showEasterEgg && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
@@ -86,7 +66,7 @@ export function Navbar() {
             <div className="bg-black/20 rounded-lg p-3 mb-4 font-mono text-lg tracking-wider font-bold select-all">
               UDB2OFF
             </div>
-            <button 
+            <button
               onClick={() => setShowEasterEgg(false)}
               className="bg-white text-ola-blue px-6 py-2 rounded-full font-medium text-sm hover:bg-opacity-90 transition-all"
             >
