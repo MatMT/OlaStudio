@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CartDrawer } from "@/components/CartDrawer";
-import { AVAILABLE_PRODUCTS, UPCOMING_PRODUCTS } from "@/data/products";
+import { AVAILABLE_PRODUCTS, UPCOMING_PRODUCTS, LOOSE_PRODUCTS } from "@/data/products";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, ShieldCheck, Truck, RotateCcw } from "lucide-react";
@@ -11,9 +11,10 @@ import { ProductImageCarousel } from "@/components/ProductImageCarousel";
 
 // Helper component for add to cart since this is a server component
 import { AddToCartButton } from "./AddToCartButton";
+import { UpsellBadge } from "@/components/UpsellBadge";
 
 export function generateStaticParams() {
-  const allProducts = [...AVAILABLE_PRODUCTS, ...UPCOMING_PRODUCTS];
+  const allProducts = [...AVAILABLE_PRODUCTS, ...UPCOMING_PRODUCTS, ...LOOSE_PRODUCTS];
   return allProducts.map((product) => ({
     id: product.id,
   }));
@@ -21,7 +22,7 @@ export function generateStaticParams() {
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
-  const product = [...AVAILABLE_PRODUCTS, ...UPCOMING_PRODUCTS].find(p => p.id === resolvedParams.id);
+  const product = [...AVAILABLE_PRODUCTS, ...UPCOMING_PRODUCTS, ...LOOSE_PRODUCTS].find(p => p.id === resolvedParams.id);
 
   if (!product) {
     notFound();
@@ -81,6 +82,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
               {product.available ? (
                 <div className="mb-12">
+                  <UpsellBadge productId={product.id} />
                   <AddToCartButton product={product} />
                 </div>
               ) : (

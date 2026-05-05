@@ -13,6 +13,10 @@ export const AVAILABLE_PRODUCTS: Product[] = [
       "/products/ap-bas/2.avif",
       "/products/ap-bas/3.avif"
     ],
+    includes: [
+      "2x Puntas Premium Blancas",
+      "2x Protectores de Silicona"
+    ],
     available: true,
   },
   {
@@ -24,6 +28,11 @@ export const AVAILABLE_PRODUCTS: Product[] = [
     image: "/products/ap-erg/1.jpeg",
     images: [
       "/products/ap-erg/1.jpeg"
+    ],
+    includes: [
+      "1x Grip de Silicona",
+      "2x Puntas Premium",
+      "2x Protectores de Silicona"
     ],
     available: true,
   },
@@ -40,17 +49,10 @@ export const AVAILABLE_PRODUCTS: Product[] = [
       "/products/ap-pro/3.avif",
       "/products/ap-pro/4.avif"
     ],
-    available: true,
-  },
-  {
-    id: "ap-anc",
-    name: "Kit Puntas Anclas",
-    description: "Puntas especiales de repuesto con diseño de ancla para un agarre superior y trazos de precisión inigualable.",
-    price: 5.00,
-    sku: "OLA-AP-ANC",
-    image: "/products/ap-anc/1.jpeg",
-    images: [
-      "/products/ap-anc/1.jpeg"
+    includes: [
+      "1x Funda Completa de Silicona",
+      "4x Puntas Premium",
+      "4x Protectores de Silicona"
     ],
     available: true,
   }
@@ -97,4 +99,43 @@ export const UPCOMING_PRODUCTS: Product[] = [
     ],
     available: true,
   },
+];
+
+export const LOOSE_PRODUCTS: Product[] = [
+  {
+    id: "ap-grip",
+    name: "Grip Individual Apple Pencil",
+    description: "Grip de silicona premium para Apple Pencil. Mejora el agarre y previene la fatiga durante largas sesiones de dibujo o escritura.",
+    price: 6.00,
+    sku: "OLA-AP-GRIP",
+    image: "/products/ap-grip/1.png",
+    images: [
+      "/products/ap-grip/1.png"
+    ],
+    available: true,
+  },
+  {
+    id: "ap-funda",
+    name: "Funda Individual Apple Pencil",
+    description: "Funda completa de silicona que protege tu Apple Pencil contra caídas y rayones. Mantiene la compatibilidad con carga magnética.",
+    price: 7.00,
+    sku: "OLA-AP-FUNDA",
+    image: "/products/ap-funda/1.png",
+    images: [
+      "/products/ap-funda/1.png"
+    ],
+    available: true,
+  },
+  {
+    id: "ap-anc",
+    name: "2 Puntas Blancas de Repuesto",
+    description: "Puntas especiales de repuesto con diseño de ancla para un agarre superior y trazos de precisión inigualable.",
+    price: 5.00,
+    sku: "OLA-AP-ANC",
+    image: "/products/ap-anc/1.jpeg",
+    images: [
+      "/products/ap-anc/1.jpeg"
+    ],
+    available: true,
+  }
 ];

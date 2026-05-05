@@ -4,7 +4,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { CartDrawer } from "@/components/CartDrawer";
 import { AnimatedText } from "@/components/AnimatedText";
 import { InfiniteProductCarousel } from "@/components/InfiniteProductCarousel";
-import { AVAILABLE_PRODUCTS, UPCOMING_PRODUCTS } from "@/data/products";
+import { AVAILABLE_PRODUCTS, UPCOMING_PRODUCTS, LOOSE_PRODUCTS } from "@/data/products";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 
@@ -74,7 +74,7 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-4 mb-8">
             <h2 className="text-3xl font-bold tracking-tight text-center">Explora el Ecosistema Completo</h2>
           </div>
-          <InfiniteProductCarousel products={[...AVAILABLE_PRODUCTS, ...UPCOMING_PRODUCTS]} speed={0.8} />
+          <InfiniteProductCarousel products={[...AVAILABLE_PRODUCTS, ...UPCOMING_PRODUCTS, ...LOOSE_PRODUCTS]} speed={0.8} />
         </section>
 
         {/* Upcoming Section */}
@@ -87,6 +87,22 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {UPCOMING_PRODUCTS.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Loose Products Section */}
+        <section id="accesorios" className="py-24 bg-background border-t border-border/50">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Accesorios Individuales</h2>
+              <p className="text-lg text-muted">Complementa y renueva tu setup con repuestos originales.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {LOOSE_PRODUCTS.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>

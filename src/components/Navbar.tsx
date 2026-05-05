@@ -37,7 +37,23 @@ export function Navbar() {
           <span>OlaStudio</span>
         </Link>
 
-        <div className="flex items-center gap-2">
+        {/* Global Navigation Links */}
+        <div className="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
+          <Link href="/#catalogo" className="text-sm font-medium text-muted hover:text-foreground transition-colors">
+            Kits Apple Pencil
+          </Link>
+          <Link href="/#accesorios" className="text-sm font-medium text-muted hover:text-foreground transition-colors">
+            Sueltos
+          </Link>
+          <Link href="/#ecosistema" className="text-sm font-medium text-muted hover:text-foreground transition-colors">
+            Ecosistema
+          </Link>
+          <Link href="/inventario" className="text-sm font-medium text-muted hover:text-foreground transition-colors">
+            Inventario Completo
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-4">
           <ThemeToggle />
           <button
             onClick={() => setIsCartOpen(true)}

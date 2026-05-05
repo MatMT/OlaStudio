@@ -10,6 +10,7 @@ export type Product = {
   sku: string;
   image?: string;
   images?: string[];
+  includes?: string[];
   available: boolean;
 };
 

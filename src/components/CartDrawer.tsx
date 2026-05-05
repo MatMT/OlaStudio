@@ -1,8 +1,11 @@
 "use client";
 
-import { X, Minus, Plus, ShoppingBag, Truck, Wallet, Info } from "lucide-react";
+import { X, Minus, Plus, ShoppingBag, Truck, Wallet, Info, Sparkles, Trash2 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { AVAILABLE_PRODUCTS, UPCOMING_PRODUCTS, LOOSE_PRODUCTS } from "@/data/products";
+import Image from "next/image";
+import Link from "next/link";
 
 const WHATSAPP_NUMBER = "50360505363";
 
@@ -20,7 +23,7 @@ const DELIVERY_OPTIONS: DeliveryOption[] = [
 ];
 
 export function CartDrawer() {
-  const { isCartOpen, setIsCartOpen, items, updateQuantity, removeFromCart, totalPrice } = useCart();
+  const { isCartOpen, setIsCartOpen, items, updateQuantity, removeFromCart, totalPrice, addToCart, clearCart } = useCart();
   const [selectedDelivery, setSelectedDelivery] = useState<DeliveryOption | null>(null);
   const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
   const paymentRef = useRef<HTMLDivElement>(null);
@@ -38,7 +41,97 @@ export function CartDrawer() {
     }
   }, [requiresPayment, selectedDelivery]);
 
+  // Suggested Products (Intelligent Upsell Logic Matrix)
+  const suggestedProducts = useMemo(() => {
+    if (items.length === 0) return [];
+    
+    // Define hierarchy to avoid suggesting inferior kits
+    const hierarchy: Record<string, number> = {
+      'ap-pro': 4,
+      'ap-erg': 3,
+      'ap-bas': 2,
+      'ap-anc': 1,
+      'ap-grip': 1,
+      'ap-funda': 1
+    };
+
+    let highestTier = 0;
+    let primaryItem = items[items.length - 1]; // default to last added
+    
+    items.forEach(item => {
+      const tier = hierarchy[item.id] || 0;
+      if (tier > highestTier) {
+        highestTier = tier;
+        primaryItem = item;
+      }
+    });
+
+    let recommendedIds: string[] = [];
+
+    switch (primaryItem.id) {
+      case 'ap-anc': // Puntas Sueltas
+        recommendedIds = ['ap-bas', 'ap-erg'];
+        break;
+      case 'ap-grip': // Grip Individual
+        recommendedIds = ['ap-erg', 'ms-wal'];
+        break;
+      case 'ap-funda': // Funda Individual
+        recommendedIds = ['ap-pro', 'ap-bas'];
+        break;
+      case 'ap-erg': // Kit Ergonómico
+        recommendedIds = ['ap-pro', 'ip-cov'];
+        break;
+      case 'ap-pro': // Kit Pro 360
+        // If they already reached the maximum kit (Kit Pro), only suggest 1 accessory.
+        recommendedIds = ['ip-cov'];
+        break;
+      case 'ip-cov': // Funda Smart Cover iPad
+        recommendedIds = ['ap-pro', 'ap-anc'];
+        break;
+      default:
+        // Default suggestions if no match
+        recommendedIds = ['ap-pro', 'ap-erg'];
+        break;
+    }
+
+    const allProducts = [...AVAILABLE_PRODUCTS, ...UPCOMING_PRODUCTS, ...LOOSE_PRODUCTS];
+    const cartIds = new Set(items.map(item => item.id));
+    
+    // Filter out items already in cart and return actual Product objects (max 2)
+    return recommendedIds
+      .filter(id => !cartIds.has(id))
+      .map(id => allProducts.find(p => p.id === id))
+      .filter(Boolean)
+      .slice(0, 2);
+  }, [items]);
+
   if (!isCartOpen) return null;
+
+  const handleAddSuggestedProduct = (product: any) => {
+    const itemsToRemove: string[] = [];
+    const hierarchy: Record<string, number> = {
+      'ap-pro': 4,
+      'ap-erg': 3,
+      'ap-bas': 2,
+      'ap-anc': 1,
+      'ap-grip': 1,
+      'ap-funda': 1
+    };
+    
+    const addedTier = hierarchy[product.id] || 0;
+    if (addedTier > 0) {
+      items.forEach(item => {
+        const itemTier = hierarchy[item.id] || 0;
+        // Remove any item that is an Apple Pencil product AND is a lower tier
+        if (itemTier > 0 && itemTier < addedTier) {
+          itemsToRemove.push(item.cartItemId);
+        }
+      });
+    }
+
+    itemsToRemove.forEach(id => removeFromCart(id));
+    addToCart(product);
+  };
 
   const handleCheckout = () => {
     if (!selectedDelivery || (requiresPayment && !selectedPayment)) return;
@@ -83,9 +176,20 @@ export function CartDrawer() {
       {/* Drawer */}
       <div className="fixed top-0 right-0 h-full w-full max-w-md bg-card-bg shadow-2xl z-50 flex flex-col animate-[slide-left_0.3s_ease-out]">
         <div className="flex items-center justify-between p-6 border-b border-border">
-          <h2 className="text-xl font-semibold flex items-center gap-2">
-            <ShoppingBag className="w-5 h-5" /> Tu Carrito
-          </h2>
+          <div className="flex items-center gap-4">
+            <h2 className="text-xl font-semibold flex items-center gap-2">
+              <ShoppingBag className="w-5 h-5" /> Tu Carrito
+            </h2>
+            {items.length > 0 && (
+              <button 
+                onClick={clearCart}
+                aria-label="Vaciar carrito"
+                className="text-muted hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-500/10"
+              >
+                <Trash2 className="w-5 h-5" />
+              </button>
+            )}
+          </div>
           <button
             onClick={() => setIsCartOpen(false)}
             className="p-2 rounded-full hover:bg-muted/10 transition-colors"
@@ -107,11 +211,23 @@ export function CartDrawer() {
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-6 border-b border-border/50 pb-8 last:border-0 last:pb-0">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg text-foreground mb-1">{item.name}</h3>
+                      <Link href={`/producto/${item.id}`} className="hover:text-ola-blue transition-colors block" onClick={() => setIsCartOpen(false)}>
+                        <h3 className="font-semibold text-lg text-foreground mb-1">{item.name}</h3>
+                      </Link>
                       {(item.variantModel && item.variantColor) && (
                         <p className="text-sm text-muted font-medium mb-1">
                           Para: {item.variantModel} | Color: {item.variantColor}
                         </p>
+                      )}
+                      {item.includes && item.includes.length > 0 && (
+                        <ul className="text-sm text-muted mb-2 space-y-1">
+                          {item.includes.map((inc, i) => (
+                            <li key={i} className="flex items-start gap-1.5">
+                              <span className="text-ola-blue font-bold">•</span>
+                              <span className="leading-tight">{inc}</span>
+                            </li>
+                          ))}
+                        </ul>
                       )}
                       <p className="text-sm text-muted mb-3">SKU: {item.sku}</p>
                       <p className="font-bold text-xl text-ola-blue">${item.price.toFixed(2)}</p>
@@ -144,6 +260,47 @@ export function CartDrawer() {
                   </div>
                 ))}
               </div>
+
+              {/* Completa tu Setup (Upsell) - Moved above Delivery Selection */}
+              {suggestedProducts.length > 0 && (
+                <div className="relative mt-2 mb-4">
+                  {/* Glowing contour */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-ola-blue via-purple-500 to-cyan-400 rounded-2xl blur opacity-30 animate-pulse"></div>
+                  <div className="relative border border-border/50 rounded-2xl p-5 bg-card-bg/90 backdrop-blur-sm shadow-xl">
+                    <h3 className="font-bold text-base mb-4 text-foreground flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-purple-400" />
+                      Completa tu setup
+                    </h3>
+                    <div className="flex flex-col gap-4">
+                      {suggestedProducts.map(product => (
+                        <div key={product.id} className="flex gap-4 items-center bg-background border border-border p-3 rounded-xl hover:border-ola-blue/50 transition-colors">
+                          <div className="relative w-16 h-16 bg-muted/10 rounded-lg shrink-0">
+                            {product.image && (
+                              <Image 
+                                src={product.image} 
+                                alt={product.name} 
+                                fill 
+                                className="object-cover rounded-lg"
+                              />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-sm text-foreground truncate">{product.name}</p>
+                            <p className="text-sm font-bold text-ola-blue">${product.price.toFixed(2)}</p>
+                          </div>
+                          <button 
+                            onClick={() => handleAddSuggestedProduct(product)}
+                            className="bg-ola-blue/10 hover:bg-ola-blue hover:text-white text-ola-blue p-2 rounded-full transition-colors shrink-0"
+                            aria-label="Agregar"
+                          >
+                            <Plus className="w-5 h-5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Delivery Selection */}
               <div className="mt-4 border border-border rounded-2xl p-5 bg-background/50">
