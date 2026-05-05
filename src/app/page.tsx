@@ -6,7 +6,7 @@ import { AnimatedText } from "@/components/AnimatedText";
 import { InfiniteProductCarousel } from "@/components/InfiniteProductCarousel";
 import { AVAILABLE_PRODUCTS, UPCOMING_PRODUCTS } from "@/data/products";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 export default function Home() {
   // Only show the first 3 products on the home page
@@ -78,12 +78,9 @@ export default function Home() {
         </section>
 
         {/* Upcoming Section */}
-        <section className="py-24 bg-card-bg/50 border-t border-border/50">
+        <section id="ecosistema" className="py-24 bg-card-bg/50 border-t border-border/50">
           <div className="max-w-6xl mx-auto px-4">
             <div className="mb-16">
-              <div className="inline-block bg-muted/10 text-muted px-3 py-1 rounded-full text-sm font-semibold tracking-wider uppercase mb-4">
-                Próximos Lanzamientos
-              </div>
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Ecosistema de Expansión</h2>
               <p className="text-lg text-muted">Nuevos productos en camino. Muy pronto en OlaStudio.</p>
             </div>
@@ -115,6 +112,16 @@ export default function Home() {
           </div>
         </section>
       </main>
+
+      {/* Floating button – new products */}
+      <a
+        href="#ecosistema"
+        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex items-center gap-2 bg-ola-blue text-white px-4 py-3 md:px-5 rounded-full font-semibold shadow-lg hover:bg-ola-blue-hover hover:shadow-ola-blue/40 hover:-translate-y-1 transition-all duration-300"
+        aria-label="Ir a Nuevos Productos"
+      >
+        <Sparkles className="w-5 h-5" />
+        <span className="hidden sm:inline">Nuevos Productos</span>
+      </a>
 
       <Footer />
       <CartDrawer />
