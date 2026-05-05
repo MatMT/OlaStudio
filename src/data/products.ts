@@ -87,7 +87,7 @@ export const UPCOMING_PRODUCTS: Product[] = [
   },
   {
     id: "ip-cov",
-    name: "Funda Smart Cover para iPad",
+    name: "Smart Cover para iPad Mini",
     description: "Funda protectora inteligente con tapa plegable y soporte. Diseño bicolor: trasera transparente y delantera negra. Compatible exclusivamente con iPad Mini (6ª y 7ª Generación).",
     price: 18.00,
     sku: "OLA-IP-COV",

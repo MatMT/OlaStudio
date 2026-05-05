@@ -1,15 +1,17 @@
 "use client";
 
-import { X, Minus, Plus, ShoppingBag, Truck, Wallet, Info, Sparkles, Trash2 } from "lucide-react";
+import { X, Minus, Plus, ShoppingBag, Truck, Wallet, Info, Sparkles, Trash2, ChevronDown } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useUpsell } from "@/hooks/useUpsell";
 import { useCheckout, DELIVERY_OPTIONS } from "@/hooks/useCheckout";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export function CartDrawer() {
   const { isCartOpen, setIsCartOpen, items, updateQuantity, removeFromCart, totalPrice, clearCart } = useCart();
   const { suggestedProducts, handleAddSuggestedProduct } = useUpsell();
+  const [isUpsellOpen, setIsUpsellOpen] = useState(false);
   const {
     selectedDelivery, setSelectedDelivery,
     selectedPayment,  setSelectedPayment,
@@ -118,19 +120,51 @@ export function CartDrawer() {
                 ))}
               </div>
 
-              {/* Completa tu Setup (Upsell) */}
+              {/* Completa tu Setup — Collapsible Upsell */}
               {suggestedProducts.length > 0 && (
-                <div className="relative mt-2 mb-4">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-ola-blue via-purple-500 to-cyan-400 rounded-2xl blur opacity-30 animate-pulse" />
-                  <div className="relative border border-border/50 rounded-2xl p-5 bg-card-bg/90 backdrop-blur-sm shadow-xl">
-                    <h3 className="font-bold text-base mb-4 text-foreground flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-purple-400" />
-                      Completa tu setup
-                    </h3>
-                    <div className="flex flex-col gap-4">
+                <div className="mt-2 mb-4">
+                  {/* Trigger button — glowing border via box-shadow */}
+                  <button
+                    onClick={() => setIsUpsellOpen((prev) => !prev)}
+                    style={{
+                      boxShadow: isUpsellOpen
+                        ? "0 0 0 1.5px #8b5cf6, 0 0 16px 2px rgba(139,92,246,0.35), 0 0 32px 4px rgba(59,130,246,0.2)"
+                        : "0 0 0 1px rgba(139,92,246,0.4)",
+                    }}
+                    className="w-full flex items-center justify-between gap-3 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-ola-blue/10 via-purple-500/10 to-cyan-400/10 hover:from-ola-blue/15 hover:via-purple-500/15 hover:to-cyan-400/15 transition-all duration-300 group"
+                  >
+                    <span className="flex items-center gap-2 font-semibold text-sm text-foreground">
+                      <Sparkles className="w-4 h-4 text-purple-400" />
+                      Mejorar mi compra
+                      <span className="text-xs font-normal text-muted bg-muted/20 px-2 py-0.5 rounded-full">
+                        {suggestedProducts.length} sugerencia{suggestedProducts.length > 1 ? "s" : ""}
+                      </span>
+                    </span>
+                    <ChevronDown
+                      className={`w-4 h-4 text-muted transition-transform duration-300 ${isUpsellOpen ? "rotate-180" : ""}`}
+                    />
+                  </button>
+
+                  {/* Collapsible panel — glow via ring + shadow, no overflow-hidden conflict */}
+                  <div
+                    className={`transition-all duration-300 ease-in-out ${
+                      isUpsellOpen ? "max-h-[400px] opacity-100 mt-3" : "max-h-0 opacity-0 pointer-events-none"
+                    }`}
+                    style={{ overflow: isUpsellOpen ? "visible" : "hidden" }}
+                  >
+                    <div
+                      className="rounded-2xl p-4 bg-card-bg/95 backdrop-blur-sm flex flex-col gap-3"
+                      style={{
+                        boxShadow:
+                          "0 0 0 1.5px rgba(139,92,246,0.5), 0 0 24px 4px rgba(139,92,246,0.2), 0 0 48px 8px rgba(59,130,246,0.1)",
+                      }}
+                    >
                       {suggestedProducts.map((product) => (
-                        <div key={product.id} className="flex gap-4 items-center bg-background border border-border p-3 rounded-xl hover:border-ola-blue/50 transition-colors">
-                          <div className="relative w-16 h-16 bg-muted/10 rounded-lg shrink-0">
+                        <div
+                          key={product.id}
+                          className="flex gap-4 items-center bg-background border border-border p-3 rounded-xl hover:border-ola-blue/50 transition-colors"
+                        >
+                          <div className="relative w-14 h-14 bg-muted/10 rounded-lg shrink-0">
                             {product.image && (
                               <Image src={product.image} alt={product.name} fill className="object-cover rounded-lg" />
                             )}
