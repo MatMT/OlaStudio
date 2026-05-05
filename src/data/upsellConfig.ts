@@ -1,56 +1,106 @@
 /**
- * Upsell Configuration
+ * Upsell Configuration — Graph-node model
  *
- * This file centralizes all upsell/cross-sell logic for the store.
- * To update recommendations, edit the maps below — no need to touch component code.
+ * Single source of truth: declare each product as a node in the upgrade graph.
+ * PRODUCT_HIERARCHY, CART_UPSELL_MAP and UPGRADE_REPLACES are all derived
+ * automatically — you only ever edit ONE place to add or change a product.
+ *
+ * Node shape:
+ *   tier        — 0 = accessory branch (no kit hierarchy), 1-4 = kit ladder
+ *   upgradeTo   — ordered list of product IDs to suggest next (graph edges)
+ *   replaces    — IDs to remove from cart when THIS node is accepted as an upgrade
+ *                 (items whose functionality this kit already covers)
  */
 
-// ─── Hierarchy ────────────────────────────────────────────────────────────────
-// Used to determine which product is "superior" to another.
-// When a customer accepts an upsell, all cart items with a lower tier are removed.
-export const PRODUCT_HIERARCHY: Record<string, number> = {
-  "ap-pro":   4,  // Kit Pro 360°
-  "ap-erg":   3,  // Kit Ergonómico
-  "ap-bas":   2,  // Kit Básico
-  "ip-cov":   2,  // Funda Smart Cover (iPad — same tier, different category)
-  "ap-anc":   1,  // 2 Puntas Blancas (suelto)
-  "ap-grip":  1,  // Grip Individual (suelto)
-  "ap-funda": 1,  // Funda Individual (suelto)
+// ─── Graph ────────────────────────────────────────────────────────────────────
+
+export type ProductNode = {
+  id: string;
+  tier: number;
+  upgradeTo: string[];
+  replaces: string[];
 };
 
-// ─── Upgrade Replaces Map ─────────────────────────────────────────────────────
-// When a customer accepts an upsell to the KEY product,
-// remove ALL of the listed product IDs from the cart (because the kit already includes them).
-// This is additive on top of the tier-based removal in useUpsell.
-export const UPGRADE_REPLACES: Record<string, string[]> = {
-  "ap-pro":  ["ap-funda", "ap-grip", "ap-anc", "ap-bas", "ap-erg"], // Kit Pro includes funda + grip + tips
-  "ap-erg":  ["ap-grip", "ap-anc", "ap-bas"],                        // Kit Erg includes grip + tips
-  "ap-bas":  ["ap-anc"],                                              // Kit Básico includes puntas sueltas
-};
+export const PRODUCT_GRAPH: ProductNode[] = [
+  // ── Loose accessories (tier 1) ──────────────────────────────────────────────
+  {
+    id: "ap-funda",
+    tier: 1,
+    upgradeTo: ["ap-pro"],              // Funda suelta → Kit Pro 360° (ya la incluye)
+    replaces:  [],
+  },
+  {
+    id: "ap-grip",
+    tier: 1,
+    upgradeTo: ["ap-erg"],              // Grip suelto → Kit Ergonómico (ya lo incluye)
+    replaces:  [],
+  },
+  {
+    id: "ap-anc",
+    tier: 1,
+    upgradeTo: ["ap-bas", "ap-erg"],    // Puntas sueltas → Kit Básico o Ergonómico
+    replaces:  [],
+  },
 
-// ─── Cart Upsell Matrix ───────────────────────────────────────────────────────
-// Defines which product IDs to suggest in the cart drawer for each primary product.
-// Rules:
-// - ap-funda in cart  → upgrade to Kit Pro 360° (it already includes the funda)
-// - ap-grip in cart   → upgrade to Kit Ergonómico (it already includes the grip)
-// - Once at Kit Pro (tier 4), only suggest non-kit extras (wallet, iPad cover)
-// - Once at Kit Erg (tier 3), suggest Kit Pro upgrade OR one accessory
-export const CART_UPSELL_MAP: Record<string, string[]> = {
-  // ── Loose accessories ─────────────────────────────────────────────────────
-  "ap-funda": ["ap-pro"],             // Funda suelta → upgrade a Kit Pro 360° (ya incluye la funda)
-  "ap-grip":  ["ap-erg"],             // Grip suelto  → upgrade a Kit Ergonómico (ya incluye el grip)
-  "ap-anc":   ["ap-bas", "ap-erg"],   // Puntas sueltas → Kit Básico o Kit Ergonómico
-  // ── Kits ─────────────────────────────────────────────────────────────────
-  "ap-bas":   ["ap-erg", "ap-pro"],   // Kit Básico → Kit Ergonómico → Kit Pro
-  "ap-erg":   ["ap-pro", "ip-cov"],   // Kit Ergonómico → Kit Pro, luego extras
-  "ap-pro":   ["ip-cov", "ms-wal"],   // Kit Pro (top) → solo accesorios extra
-  // ── Accesorios extra ─────────────────────────────────────────────────────
-  "ip-cov":   ["ms-wal", "ad-cas"],   // Funda iPad → Wallet o Estuche AirPods
-  "ms-wal":   ["ad-cas", "ip-cov"],   // MagSafe Wallet → Estuche AirPods o Funda iPad
-  "ad-cas":   ["ms-wal"],             // Estuche AirPods → MagSafe Wallet
-};
+  // ── Kits (tier 2-4) ─────────────────────────────────────────────────────────
+  {
+    id: "ap-bas",
+    tier: 2,
+    upgradeTo: ["ap-erg", "ap-pro"],    // Kit Básico → Kit Ergonómico → Kit Pro
+    replaces:  ["ap-anc"],              // ya incluye las puntas sueltas
+  },
+  {
+    id: "ap-erg",
+    tier: 3,
+    upgradeTo: ["ap-pro", "ip-cov"],    // Kit Ergonómico → Kit Pro, luego extras
+    replaces:  ["ap-grip", "ap-anc", "ap-bas"],
+  },
+  {
+    id: "ap-pro",
+    tier: 4,
+    upgradeTo: ["ip-cov", "ms-wal"],    // Kit Pro (tope) → solo accesorios extra
+    replaces:  ["ap-funda", "ap-grip", "ap-anc", "ap-bas", "ap-erg"],
+  },
 
-// Default suggestions if the primary product has no specific mapping
+  // ── Extra accessories (tier 0 — rama independiente) ─────────────────────────
+  {
+    id: "ip-cov",
+    tier: 0,
+    upgradeTo: ["ms-wal", "ad-cas"],
+    replaces:  [],
+  },
+  {
+    id: "ms-wal",
+    tier: 0,
+    upgradeTo: ["ad-cas", "ip-cov"],
+    replaces:  [],
+  },
+  {
+    id: "ad-cas",
+    tier: 0,
+    upgradeTo: ["ms-wal"],
+    replaces:  [],
+  },
+];
+
+// ─── Derived lookup tables (auto-generated — do not edit manually) ─────────────
+
+/** tier number for each product id */
+export const PRODUCT_HIERARCHY: Record<string, number> = Object.fromEntries(
+  PRODUCT_GRAPH.map((n) => [n.id, n.tier])
+);
+
+/** which products to suggest next, per primary cart product */
+export const CART_UPSELL_MAP: Record<string, string[]> = Object.fromEntries(
+  PRODUCT_GRAPH.map((n) => [n.id, n.upgradeTo])
+);
+
+/** which cart items to remove when a product is accepted as an upgrade */
+export const UPGRADE_REPLACES: Record<string, string[]> = Object.fromEntries(
+  PRODUCT_GRAPH.map((n) => [n.id, n.replaces])
+);
+
+/** fallback suggestions when primaryItem has no node in the graph */
 export const DEFAULT_SUGGESTIONS: string[] = ["ap-pro", "ap-erg"];
 
 // ─── Product Page Upsell ──────────────────────────────────────────────────────
@@ -78,3 +128,4 @@ export const PRODUCT_PAGE_UPSELL_MAP: Record<string, ProductPageUpsell> = {
     targetId: "ap-pro",
   },
 };
+
