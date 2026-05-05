@@ -18,21 +18,36 @@ export const PRODUCT_HIERARCHY: Record<string, number> = {
   "ap-funda": 1,  // Funda Individual (suelto)
 };
 
+// ─── Upgrade Replaces Map ─────────────────────────────────────────────────────
+// When a customer accepts an upsell to the KEY product,
+// remove ALL of the listed product IDs from the cart (because the kit already includes them).
+// This is additive on top of the tier-based removal in useUpsell.
+export const UPGRADE_REPLACES: Record<string, string[]> = {
+  "ap-pro":  ["ap-funda", "ap-grip", "ap-anc", "ap-bas", "ap-erg"], // Kit Pro includes funda + grip + tips
+  "ap-erg":  ["ap-grip", "ap-anc", "ap-bas"],                        // Kit Erg includes grip + tips
+  "ap-bas":  ["ap-anc"],                                              // Kit Básico includes puntas sueltas
+};
+
 // ─── Cart Upsell Matrix ───────────────────────────────────────────────────────
 // Defines which product IDs to suggest in the cart drawer for each primary product.
 // Rules:
-// - Max 2 suggestions for the first upsell.
-// - Once the customer has reached tier 4 (Kit Pro), suggest only 1 accessory.
-// - After 2 accepted upsells, no more suggestions are shown (controlled in useUpsell).
+// - ap-funda in cart  → upgrade to Kit Pro 360° (it already includes the funda)
+// - ap-grip in cart   → upgrade to Kit Ergonómico (it already includes the grip)
+// - Once at Kit Pro (tier 4), only suggest non-kit extras (wallet, iPad cover)
+// - Once at Kit Erg (tier 3), suggest Kit Pro upgrade OR one accessory
 export const CART_UPSELL_MAP: Record<string, string[]> = {
-  "ap-anc":   ["ap-bas", "ap-erg"],   // Puntas → Kit Básico, Kit Ergonómico
-  "ap-grip":  ["ap-erg", "ms-wal"],   // Grip → Kit Ergonómico, MagSafe Wallet
-  "ap-funda": ["ap-pro", "ap-bas"],   // Funda → Kit Pro, Kit Básico
-  "ap-erg":   ["ap-pro", "ip-cov"],   // Kit Ergonómico → Kit Pro, Funda iPad
-  "ap-pro":   ["ip-cov"],             // Kit Pro (top) → Solo 1 accesorio
-  "ip-cov":   ["ap-pro", "ap-anc"],   // Funda iPad → Kit Pro, Puntas
-  "ms-wal":   ["ad-cas"],             // MagSafe → Estuche AirPods
-  "ad-cas":   ["ms-wal"],             // AirPods → MagSafe
+  // ── Loose accessories ─────────────────────────────────────────────────────
+  "ap-funda": ["ap-pro"],             // Funda suelta → upgrade a Kit Pro 360° (ya incluye la funda)
+  "ap-grip":  ["ap-erg"],             // Grip suelto  → upgrade a Kit Ergonómico (ya incluye el grip)
+  "ap-anc":   ["ap-bas", "ap-erg"],   // Puntas sueltas → Kit Básico o Kit Ergonómico
+  // ── Kits ─────────────────────────────────────────────────────────────────
+  "ap-bas":   ["ap-erg", "ap-pro"],   // Kit Básico → Kit Ergonómico → Kit Pro
+  "ap-erg":   ["ap-pro", "ip-cov"],   // Kit Ergonómico → Kit Pro, luego extras
+  "ap-pro":   ["ip-cov", "ms-wal"],   // Kit Pro (top) → solo accesorios extra
+  // ── Accesorios extra ─────────────────────────────────────────────────────
+  "ip-cov":   ["ms-wal", "ad-cas"],   // Funda iPad → Wallet o Estuche AirPods
+  "ms-wal":   ["ad-cas", "ip-cov"],   // MagSafe Wallet → Estuche AirPods o Funda iPad
+  "ad-cas":   ["ms-wal"],             // Estuche AirPods → MagSafe Wallet
 };
 
 // Default suggestions if the primary product has no specific mapping
@@ -58,7 +73,7 @@ export const PRODUCT_PAGE_UPSELL_MAP: Record<string, ProductPageUpsell> = {
     targetId: "ap-erg",
   },
   "ap-funda": {
-    title: "Te recomendamos: Kit Pro ($18.00)",
+    title: "Te recomendamos: Kit Pro 360° ($18.00)",
     items: ["1x Funda completa de silicona", "4x Puntas Blancas", "4x Protectores de pantalla"],
     targetId: "ap-pro",
   },

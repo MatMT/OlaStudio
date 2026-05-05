@@ -6,6 +6,7 @@ import { AVAILABLE_PRODUCTS, UPCOMING_PRODUCTS, LOOSE_PRODUCTS } from "@/data/pr
 import {
   PRODUCT_HIERARCHY,
   CART_UPSELL_MAP,
+  UPGRADE_REPLACES,
   DEFAULT_SUGGESTIONS,
 } from "@/data/upsellConfig";
 
@@ -48,18 +49,44 @@ export function useUpsell() {
       .slice(0, 2);
   }, [primaryItem, items]);
 
-  // Add a suggested product, removing any inferior Apple Pencil kit/accessory first
+  /**
+   * Accept an upsell suggestion.
+   *
+   * Removal priority (cumulative):
+   * 1. Any cart item whose tier is lower than the accepted product's tier
+   *    AND that belongs to the same Pencil-kit hierarchy (tier > 0).
+   * 2. Any cart item explicitly listed in UPGRADE_REPLACES[product.id]
+   *    (items the accepted kit already includes, e.g. ap-funda when buying ap-pro).
+   *
+   * This guarantees the cart never contains redundant or contradictory items
+   * after an upgrade.
+   */
   const handleAddSuggestedProduct = (product: Product) => {
     const addedTier = PRODUCT_HIERARCHY[product.id] ?? 0;
 
+    // Build the set of IDs to remove
+    const toRemoveIds = new Set<string>();
+
+    // Rule 1: remove inferior-tier items in the same Pencil hierarchy
     if (addedTier > 0) {
       items.forEach((item) => {
         const itemTier = PRODUCT_HIERARCHY[item.id] ?? 0;
         if (itemTier > 0 && itemTier < addedTier) {
-          removeFromCart(item.cartItemId);
+          toRemoveIds.add(item.id);
         }
       });
     }
+
+    // Rule 2: remove items the new kit already covers (explicit replace list)
+    const replaces = UPGRADE_REPLACES[product.id] ?? [];
+    replaces.forEach((id) => toRemoveIds.add(id));
+
+    // Apply removals
+    items.forEach((item) => {
+      if (toRemoveIds.has(item.id)) {
+        removeFromCart(item.cartItemId);
+      }
+    });
 
     addToCart(product);
   };
