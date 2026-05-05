@@ -120,7 +120,7 @@ export const LOOSE_PRODUCTS: Product[] = [
     description: "Funda completa de silicona que protege tu Apple Pencil contra caídas y rayones. Mantiene la compatibilidad con carga magnética.",
     price: 7.00,
     sku: "OLA-AP-FUNDA",
-    image: "/products/ap-funda/1.png",
+    image: "/products/ap-funda/1.jpg",
     images: [
       "/products/ap-funda/1.png"
     ],
