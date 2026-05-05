@@ -68,12 +68,12 @@ export const UPCOMING_PRODUCTS: Product[] = [
       "/products/ms-wal/1.jpeg",
       "/products/ms-wal/2.avif"
     ],
-    available: false,
+    available: true,
   },
   {
     id: "ad-cas",
     name: "Estuche de Protección para AirPods",
-    description: "Funda protectora de silicona con cordón creativo para AirPods. Protege contra impactos y rayones. Colores oscuros.",
+    description: "Funda protectora de silicona con cordón creativo para AirPods. Protege contra impactos y rayones. Compatible con AirPods Pro (1ª y 2ª Gen) y AirPods 4.",
     price: 10.00,
     sku: "OLA-AD-CAS",
     image: "/products/ad-cas/1.avif",
@@ -81,12 +81,12 @@ export const UPCOMING_PRODUCTS: Product[] = [
       "/products/ad-cas/1.avif",
       "/products/ad-cas/2.png"
     ],
-    available: false,
+    available: true,
   },
   {
     id: "ip-cov",
     name: "Funda Smart Cover para iPad",
-    description: "Funda protectora inteligente para iPad con tapa plegable y soporte. Protege el equipo al 100% mientras permite diferentes ángulos de visión.",
+    description: "Funda protectora inteligente con tapa plegable y soporte. Diseño bicolor: trasera transparente y delantera negra. Compatible exclusivamente con iPad Mini (6ª y 7ª Generación).",
     price: 18.00,
     sku: "OLA-IP-COV",
     image: "/products/ip-cov/1.avif",
@@ -95,6 +95,6 @@ export const UPCOMING_PRODUCTS: Product[] = [
       "/products/ip-cov/2.avif",
       "/products/ip-cov/3.avif"
     ],
-    available: false,
+    available: true,
   },
 ];
