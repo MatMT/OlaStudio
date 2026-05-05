@@ -27,19 +27,19 @@ export const PRODUCT_GRAPH: ProductNode[] = [
     id: "ap-funda",
     tier: 1,
     upgradeTo: ["ap-pro"],              // Funda suelta → Kit Pro 360° (ya la incluye)
-    replaces:  [],
+    replaces: [],
   },
   {
     id: "ap-grip",
     tier: 1,
     upgradeTo: ["ap-erg"],              // Grip suelto → Kit Ergonómico (ya lo incluye)
-    replaces:  [],
+    replaces: [],
   },
   {
     id: "ap-anc",
     tier: 1,
     upgradeTo: ["ap-bas", "ap-erg"],    // Puntas sueltas → Kit Básico o Ergonómico
-    replaces:  [],
+    replaces: [],
   },
 
   // ── Kits (tier 2-4) ─────────────────────────────────────────────────────────
@@ -47,19 +47,19 @@ export const PRODUCT_GRAPH: ProductNode[] = [
     id: "ap-bas",
     tier: 2,
     upgradeTo: ["ap-erg", "ap-pro"],    // Kit Básico → Kit Ergonómico → Kit Pro
-    replaces:  ["ap-anc"],              // ya incluye las puntas sueltas
+    replaces: ["ap-anc"],              // ya incluye las puntas sueltas
   },
   {
     id: "ap-erg",
     tier: 3,
     upgradeTo: ["ap-pro", "ip-cov"],    // Kit Ergonómico → Kit Pro, luego extras
-    replaces:  ["ap-grip", "ap-anc", "ap-bas"],
+    replaces: ["ap-grip", "ap-anc", "ap-bas"],
   },
   {
     id: "ap-pro",
     tier: 4,
     upgradeTo: ["ip-cov", "ms-wal"],    // Kit Pro (tope) → solo accesorios extra
-    replaces:  ["ap-funda", "ap-grip", "ap-anc", "ap-bas", "ap-erg"],
+    replaces: ["ap-funda", "ap-grip", "ap-anc", "ap-bas", "ap-erg"],
   },
 
   // ── Extra accessories (tier 0 — rama independiente) ─────────────────────────
@@ -67,19 +67,19 @@ export const PRODUCT_GRAPH: ProductNode[] = [
     id: "ip-cov",
     tier: 0,
     upgradeTo: ["ms-wal", "ad-cas"],
-    replaces:  [],
+    replaces: [],
   },
   {
     id: "ms-wal",
     tier: 0,
     upgradeTo: ["ad-cas", "ip-cov"],
-    replaces:  [],
+    replaces: [],
   },
   {
     id: "ad-cas",
     tier: 0,
     upgradeTo: ["ms-wal"],
-    replaces:  [],
+    replaces: [],
   },
 ];
 
@@ -114,17 +114,17 @@ export type ProductPageUpsell = {
 export const PRODUCT_PAGE_UPSELL_MAP: Record<string, ProductPageUpsell> = {
   "ap-anc": {
     title: "Te recomendamos: Kit Básico ($8.00)",
-    items: ["2x Puntas Blancas", "2x Protectores de pantalla silenciosos"],
+    items: ["2x Puntas Blancas", "2x Protectores de silicona silenciosos"],
     targetId: "ap-bas",
   },
   "ap-grip": {
     title: "Te recomendamos: Kit Ergonómico ($12.00)",
-    items: ["1x Grip de silicona", "2x Puntas Blancas", "2x Protectores de pantalla"],
+    items: ["1x Grip de silicona", "2x Puntas Blancas", "2x Protectores de silicona"],
     targetId: "ap-erg",
   },
   "ap-funda": {
     title: "Te recomendamos: Kit Pro 360° ($18.00)",
-    items: ["1x Funda completa de silicona", "4x Puntas Blancas", "4x Protectores de pantalla"],
+    items: ["1x Funda completa de silicona", "4x Puntas Blancas", "4x Protectores de silicona"],
     targetId: "ap-pro",
   },
 };
